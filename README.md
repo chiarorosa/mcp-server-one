@@ -116,6 +116,223 @@ uv run mcp dev src/mcp_server_one/server.py
 
 ### Instalar no Claude Desktop
 
+#### Método 1: Configuração Automática (Mais Fácil)
+
+Use o script de configuração incluído no projeto:
+
+```bash
+uv run python configure_claude.py
+```
+
+Este script irá:
+
+- Detectar automaticamente o sistema operacional
+- Localizar o arquivo de configuração do Claude Desktop
+- Adicionar/atualizar a configuração do MCP Server One
+- Fornecer instruções para os próximos passos
+
+#### Método 2: Instalação via CLI do MCP
+
+**Pré-requisitos:**
+
+- Certifique-se de que o pacote MCP está instalado com o extra CLI:
+
+```bash
+uv add 'mcp[cli]'
+uv sync
+```
+
+**Instalação:**
+
+```bash
+uv run mcp install src/mcp_server_one/server.py --name "MCP Server One"
+```
+
+#### Método 3: Instalação Manual
+
+Se o comando automático não funcionar (erro "Claude app not found"), configure manualmente:
+
+1. Localize o arquivo de configuração do Claude Desktop:
+
+   - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+   - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - **Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+2. Adicione a configuração do servidor:
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-one": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "CAMINHO_COMPLETO_DO_PROJETO",
+        "mcp-server-one"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+3. Substitua `CAMINHO_COMPLETO_DO_PROJETO` pelo caminho absoluto do seu projeto.
+
+#### Método 4: Usando Python direto
+
+Alternativa usando Python diretamente:
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-one": {
+      "command": "python",
+      "args": ["-m", "mcp_server_one.main"],
+      "cwd": "CAMINHO_COMPLETO_DO_PROJETO",
+      "env": {}
+    }
+  }
+}
+```
+
+#### Exemplos de Configuração por Sistema Operacional
+
+##### Windows
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-one": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "d:\\Code\\mcp-server-one",
+        "mcp-server-one"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+##### macOS/Linux
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-one": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "/caminho/para/mcp-server-one",
+        "mcp-server-one"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+##### WSL (Windows Subsystem for Linux)
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-one": {
+      "command": "wsl",
+      "args": [
+        "uv",
+        "run",
+        "--directory",
+        "/mnt/d/Code/mcp-server-one",
+        "mcp-server-one"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+**Dica:** Após editar o arquivo de configuração, reinicie o Claude Desktop para aplicar as mudanças.
+
+### Resolução de Problemas
+
+#### Erro: "typer is required"
+
+Este erro acontece quando o pacote MCP não foi instalado com o extra CLI. Para resolver:
+
+1. Reinstale o MCP com o extra CLI:
+
+```bash
+uv add 'mcp[cli]'
+```
+
+2. Sincronize as dependências:
+
+```bash
+uv sync
+```
+
+#### Erro: "Claude app not found"
+
+Este erro ocorre quando o comando `mcp install` não consegue localizar o aplicativo Claude Desktop. Soluções:
+
+1. **Verificar se o Claude Desktop está instalado** e executando
+2. **Usar instalação manual** (Método 2 acima)
+3. **Verificar permissões** de acesso ao diretório de configuração
+4. **Reiniciar o Claude Desktop** após adicionar a configuração
+
+#### Erro: "Command not found" ou "Permission denied"
+
+Para resolver problemas de permissões:
+
+1. Certifique-se de que o UV está no PATH:
+
+```bash
+which uv
+```
+
+2. Use caminhos absolutos na configuração:
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-one": {
+      "command": "/caminho/completo/para/uv",
+      "args": [
+        "run",
+        "--directory",
+        "/caminho/completo/do/projeto",
+        "mcp-server-one"
+      ],
+      "env": {}
+    }
+  }
+}
+```
+
+#### Ambiente Virtual Corrompido
+
+Se você encontrar erros relacionados ao ambiente virtual:
+
+1. Remova o ambiente virtual:
+
+```bash
+rm -rf .venv
+```
+
+2. Recrie o ambiente:
+
+```bash
+uv venv --allow-existing
+uv sync
+```
+
+#### Comando original de instalação
+
 ```bash
 uv run mcp install src/mcp_server_one/server.py --name "MCP Server One"
 ```
@@ -167,22 +384,6 @@ export MCP_SERVER_PORT=8000
 export MCP_LOG_LEVEL=INFO
 ```
 
-### Configuração do Claude Desktop
-
-Adicione ao seu `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-one": {
-      "command": "uv",
-      "args": ["run", "mcp-server-one"],
-      "env": {}
-    }
-  }
-}
-```
-
 ## 🧪 Testes
 
 ### Executar testes
@@ -212,20 +413,7 @@ uv run pytest tests/test_integration.py
 
 ### Estrutura do projeto
 
-```
-mcp-server-one/
-├── src/
-│   └── mcp_server_one/
-│       ├── __init__.py
-│       ├── main.py          # Ponto de entrada
-│       ├── server.py        # Servidor MCP principal
-│       └── api_client.py    # Cliente das APIs
-├── tests/
-│   ├── __init__.py
-│   └── test_api_client.py   # Testes unitários
-├── pyproject.toml           # Configuração do projeto
-└── README.md
-```
+# ToDo
 
 ### Linting e formatação
 
@@ -299,6 +487,8 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para detalhes.
 1. **Erro de importação do MCP**: Certifique-se de que o pacote `mcp` está instalado
 2. **APIs não respondem**: Verifique sua conexão com a internet
 3. **Porta em uso**: Mude a porta com `--port`
+4. **Erro "typer is required. Install with 'pip install mcp[cli]'"**: Execute `uv add 'mcp[cli]'` e depois `uv sync`
+5. **Erro "Claude app not found"**: Use o script de configuração automática (`uv run python configure_claude.py`) ou configure manualmente o arquivo de configuração do Claude Desktop
 
 ### Logs e debugging
 
