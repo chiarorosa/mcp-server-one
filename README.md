@@ -1,5 +1,10 @@
 # MCP Server One
 
+[![GitHub](https://img.shields.io/badge/GitHub-chiarorosa%2Fmcp--server--one-blue?logo=github)](https://github.com/chiarorosa/mcp-server-one)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://python.org)
+[![UV](https://img.shields.io/badge/UV-Package%20Manager-orange.svg)](https://github.com/astral-sh/uv)
+
 Um servidor Model Context Protocol (MCP) que fornece acesso a várias APIs públicas através de uma interface padronizada. Este servidor demonstra como integrar múltiplas APIs externas em um único servidor MCP, oferecendo recursos, ferramentas e prompts para interação com dados de diferentes fontes.
 
 ## 🚀 Características
@@ -34,10 +39,26 @@ Um servidor Model Context Protocol (MCP) que fornece acesso a várias APIs públ
 
 ## 🛠️ Instalação
 
+### Instalação Rápida
+
+```bash
+# Clone o repositório
+git clone https://github.com/chiarorosa/mcp-server-one.git
+cd mcp-server-one
+
+# Instale as dependências
+uv sync
+
+# Execute o servidor
+uv run mcp-server-one
+```
+
+### Instalação Detalhada
+
 ### 1. Clonar o repositório
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/chiarorosa/mcp-server-one.git
 cd mcp-server-one
 ```
 
@@ -291,8 +312,22 @@ uv run mcp dev src/mcp_server_one/server.py --log-level DEBUG
 
 ### Contato
 
-- Issues: [GitHub Issues](https://github.com/seu-usuario/mcp-server-one/issues)
-- Discussões: [GitHub Discussions](https://github.com/seu-usuario/mcp-server-one/discussions)
+- Issues: [GitHub Issues](https://github.com/chiarorosa/mcp-server-one/issues)
+- Discussões: [GitHub Discussions](https://github.com/chiarorosa/mcp-server-one/discussions)
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Por favor, veja [CONTRIBUTING.md](CONTRIBUTING.md) para detalhes sobre como contribuir.
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📄 Licença
+
+Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
 
 ## 🎉 Agradecimentos
 
