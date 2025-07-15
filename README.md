@@ -78,6 +78,59 @@ uv sync --dev
 uv pip install -e .
 ```
 
+### Instalação com Makefile (Alternativa)
+
+O projeto inclui um Makefile que facilita a execução dos comandos mais comuns:
+
+```bash
+# Ver todos os comandos disponíveis
+make help
+
+# Instalar dependências
+make install
+
+# Executar o servidor
+make run
+
+# Executar testes
+make test
+
+# Testar conectividade com APIs
+make test-apis
+
+# Formatar código
+make format
+
+# Executar linting
+make lint
+
+# Limpar arquivos temporários
+make clean
+```
+
+**Comandos principais:**
+- `make install` - Equivale a `uv sync`
+- `make run` - Executa o servidor usando `run_server.py`
+- `make test` - Executa todos os testes
+- `make format` - Formata o código com black e isort
+- `make lint` - Executa verificações de tipo e linting
+
+**Fluxo de trabalho completo com Makefile:**
+
+```bash
+# 1. Instalar dependências
+make install
+
+# 2. Executar testes para verificar se tudo está funcionando
+make test
+
+# 3. Testar conectividade com APIs externas
+make test-apis
+
+# 4. Executar o servidor
+make run
+```
+
 ## 🎯 Uso
 
 ### Executar o servidor
@@ -309,6 +362,7 @@ export MCP_LOG_LEVEL=INFO
 
 ### Executar testes
 
+**Usando UV diretamente:**
 ```bash
 # Todos os testes
 uv run pytest
@@ -323,11 +377,22 @@ uv run pytest tests/test_api_client.py
 uv run pytest -v
 ```
 
+**Usando Makefile (mais fácil):**
+```bash
+# Todos os testes
+make test
+
+# Testar conectividade com APIs externas
+make test-apis
+```
+
 ### Testes de integração
 
 ```bash
 # Testar APIs reais (requer internet)
 uv run pytest tests/test_integration.py
+# ou
+make test-apis
 ```
 
 ## 📊 Desenvolvimento
@@ -376,6 +441,7 @@ mcp-server-one/
 
 ### Linting e formatação
 
+**Usando UV diretamente:**
 ```bash
 # Formatação com black
 uv run black src/ tests/
@@ -388,6 +454,21 @@ uv run mypy src/
 
 # Linting
 uv run flake8 src/ tests/
+```
+
+**Usando Makefile (mais fácil):**
+```bash
+# Formatar código (black + isort)
+make format
+
+# Executar linting (mypy + flake8)
+make lint
+
+# Executar testes
+make test
+
+# Limpar arquivos temporários
+make clean
 ```
 
 ### Adicionar nova API
@@ -448,6 +529,11 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para detalhes.
 3. **Porta em uso**: Mude a porta com `--port`
 4. **Erro "typer is required. Install with 'pip install mcp[cli]'"**: Execute `uv add 'mcp[cli]'` e depois `uv sync`
 5. **Erro "Claude app not found"**: Use o script de configuração automática (`uv run python configure_claude.py`) ou configure manualmente o arquivo de configuração do Claude Desktop
+
+**Nota:** Se você encontrar problemas com o ambiente virtual, execute:
+```bash
+rm -rf .venv && uv sync
+```
 
 ### Logs e debugging
 
