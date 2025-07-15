@@ -258,85 +258,6 @@ Alternativa usando Python diretamente:
 
 **Dica:** Após editar o arquivo de configuração, reinicie o Claude Desktop para aplicar as mudanças.
 
-### Resolução de Problemas
-
-#### Erro: "typer is required"
-
-Este erro acontece quando o pacote MCP não foi instalado com o extra CLI. Para resolver:
-
-1. Reinstale o MCP com o extra CLI:
-
-```bash
-uv add 'mcp[cli]'
-```
-
-2. Sincronize as dependências:
-
-```bash
-uv sync
-```
-
-#### Erro: "Claude app not found"
-
-Este erro ocorre quando o comando `mcp install` não consegue localizar o aplicativo Claude Desktop. Soluções:
-
-1. **Verificar se o Claude Desktop está instalado** e executando
-2. **Usar instalação manual** (Método 2 acima)
-3. **Verificar permissões** de acesso ao diretório de configuração
-4. **Reiniciar o Claude Desktop** após adicionar a configuração
-
-#### Erro: "Command not found" ou "Permission denied"
-
-Para resolver problemas de permissões:
-
-1. Certifique-se de que o UV está no PATH:
-
-```bash
-which uv
-```
-
-2. Use caminhos absolutos na configuração:
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-one": {
-      "command": "/caminho/completo/para/uv",
-      "args": [
-        "run",
-        "--directory",
-        "/caminho/completo/do/projeto",
-        "mcp-server-one"
-      ],
-      "env": {}
-    }
-  }
-}
-```
-
-#### Ambiente Virtual Corrompido
-
-Se você encontrar erros relacionados ao ambiente virtual:
-
-1. Remova o ambiente virtual:
-
-```bash
-rm -rf .venv
-```
-
-2. Recrie o ambiente:
-
-```bash
-uv venv --allow-existing
-uv sync
-```
-
-#### Comando original de instalação
-
-```bash
-uv run mcp install src/mcp_server_one/server.py --name "MCP Server One"
-```
-
 ## 📚 Recursos Disponíveis
 
 ### Resources (Recursos)
@@ -413,7 +334,45 @@ uv run pytest tests/test_integration.py
 
 ### Estrutura do projeto
 
-# ToDo
+```
+mcp-server-one/
+├── .git/                           # Controle de versão Git
+├── .gitignore                      # Arquivos ignorados pelo Git
+├── .venv/                          # Ambiente virtual Python
+├── claude_desktop_config.md        # Documentação de configuração do Claude
+├── configure_claude.py             # Script de configuração automática do Claude
+├── CONTRIBUTING.md                 # Guia de contribuição
+├── DEVELOPMENT.md                  # Guia de desenvolvimento
+├── LICENSE                         # Licença MIT
+├── Makefile                        # Comandos de automação
+├── pyproject.toml                  # Configuração do projeto e dependências
+├── README.md                       # Documentação principal
+├── run_server.py                   # Script para execução do servidor
+├── standalone_server.py            # Servidor standalone
+├── test_apis.py                    # Testes das APIs
+├── test_import.py                  # Testes de importação
+├── uv.lock                         # Lock file das dependências
+├── src/
+│   └── mcp_server_one/
+│       ├── __init__.py             # Inicialização do pacote
+│       ├── api_client.py           # Cliente das APIs externas
+│       ├── main.py                 # Ponto de entrada principal
+│       └── server.py               # Servidor MCP principal
+├── tests/
+│   ├── __init__.py                 # Inicialização dos testes
+│   └── test_api_client.py          # Testes unitários do cliente API
+└── examples/
+    ├── simple_demo.py              # Demonstração simples
+    └── test_client.py              # Cliente de teste
+```
+
+#### Arquivos Principais
+
+- **`src/mcp_server_one/main.py`**: Ponto de entrada da aplicação
+- **`src/mcp_server_one/server.py`**: Implementação do servidor MCP
+- **`src/mcp_server_one/api_client.py`**: Gerenciador das APIs externas
+- **`configure_claude.py`**: Script para configuração automática do Claude Desktop
+- **`pyproject.toml`**: Configuração do projeto, dependências e scripts
 
 ### Linting e formatação
 
