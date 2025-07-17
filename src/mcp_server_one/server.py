@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from typing import Any, Dict, List, Optional
 
+from mcp.server.fastmcp.utilities.types import Image
 from mcp.server.fastmcp import FastMCP, Context
 from mcp.types import TextContent, Resource, Tool
 
@@ -269,6 +270,21 @@ async def get_jokes_by_type(joke_type: str, ctx: Context = None) -> str:
     except Exception as e:
         if ctx:
             await ctx.error(f"Erro ao buscar piadas do tipo {joke_type}: {str(e)}")
+        return f"Erro: {str(e)}"
+
+@mcp.tool()
+async def generate_qrcode(text: str, ctx: Context = None) -> Image:
+    """Gera um QR code"""
+    try:
+        app_ctx = mcp.get_context().request_context.lifespan_context
+        img = await app_ctx.api_manager.qrcode.generate_qrcode(text)
+
+        return Image(data=img, format="png")
+
+
+    except Exception as e:
+        if ctx:
+            await ctx.error(f"Erro ao gerar QR code: {str(e)}")
         return f"Erro: {str(e)}"
 
 
