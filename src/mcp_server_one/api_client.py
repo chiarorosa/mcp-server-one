@@ -28,6 +28,15 @@ class APIClient:
             raise Exception(f"Erro HTTP: {e}")
         except json.JSONDecodeError:
             raise Exception("Resposta não é um JSON válido")
+
+    async def get_bytes(self, url: str, params: Optional[Dict[str, Any]] = None) -> bytes:
+        """Realiza uma requisição GET que retorna dados em bytes"""
+        try:
+            response = await self.client.get(url, params=params)
+            response.raise_for_status()
+            return response.content
+        except httpx.HTTPError as e:
+            raise Exception(f"Erro HTTP: {e}")
     
     async def post(self, url: str, data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Realiza uma requisição POST"""
