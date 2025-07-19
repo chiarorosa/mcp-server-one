@@ -28,6 +28,15 @@ class APIClient:
             raise Exception(f"Erro HTTP: {e}")
         except json.JSONDecodeError:
             raise Exception("Resposta não é um JSON válido")
+
+    async def get_bytes(self, url: str, params: Optional[Dict[str, Any]] = None) -> bytes:
+        """Realiza uma requisição GET que retorna dados em bytes"""
+        try:
+            response = await self.client.get(url, params=params)
+            response.raise_for_status()
+            return response.content
+        except httpx.HTTPError as e:
+            raise Exception(f"Erro HTTP: {e}")
     
     async def post(self, url: str, data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Realiza uma requisição POST"""
@@ -137,6 +146,19 @@ class JokeAPI:
         url = f"{self.BASE_URL}/jokes/{joke_type}/random"
         return await self.client.get(url)
 
+class QRcodeAPI:
+    """Cliente para QR Code Generator"""
+
+    BASE_URL = "https://api.qrserver.com/v1"
+
+    def __init__(self, client: APIClient):
+        self.client = client
+
+    async def generate_qrcode(self, text: str):
+        """Gera o QR code"""
+        url = f"{self.BASE_URL}/create-qr-code/?data={text}"
+        return await self.client.get_bytes(url)
+
 
 class APIManager:
     """Gerenciador de todas as APIs"""
@@ -146,6 +168,7 @@ class APIManager:
         self.jsonplaceholder = JSONPlaceholderAPI(self.client)
         self.catfacts = CatFactsAPI(self.client)
         self.jokes = JokeAPI(self.client)
+        self.qrcode = QRcodeAPI(self.client)
     
     async def close(self):
         """Fecha todas as conexões"""

@@ -5,7 +5,7 @@ import pytest
 import asyncio
 from unittest.mock import AsyncMock, MagicMock
 
-from mcp_server_one.api_client import APIClient, JSONPlaceholderAPI, CatFactsAPI, JokeAPI
+from mcp_server_one.api_client import APIClient, JSONPlaceholderAPI, CatFactsAPI, JokeAPI, QRcodeAPI
 
 
 @pytest.fixture
@@ -31,6 +31,11 @@ def catfacts_api(mock_client):
 def joke_api(mock_client):
     """Fixture para Joke API"""
     return JokeAPI(mock_client)
+
+@pytest.fixture
+def qrcode_api(mock_client):
+    """Fixture para QR code API"""
+    return QRcodeAPI(mock_client)
 
 
 class TestJSONPlaceholderAPI:
@@ -187,3 +192,21 @@ class TestJokeAPI:
         # Assert
         assert result == mock_jokes
         mock_client.get.assert_called_once_with("https://official-joke-api.appspot.com/jokes/programming/random")
+
+class TestQrCodeAPI:
+    """Testes para QR code API"""
+
+    @pytest.mark.asyncio
+    async def test_generate_qr_code(self, qrcode_api, mock_client):
+        """Testa gerar um QRcode"""
+        # Arrange
+        mock_qr=b"Pablo > Sam"
+        mock_client.get_bytes.return_value = mock_qr
+
+        # Act
+        result = await qrcode_api.generate_qrcode("foo")
+
+        # Assert
+        assert result == mock_qr
+        mock_client.get_bytes.assert_called_once_with("https://api.qrserver.com/v1/create-qr-code/?data=foo")
+

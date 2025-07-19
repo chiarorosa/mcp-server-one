@@ -23,6 +23,10 @@ Um servidor Model Context Protocol (MCP) que fornece acesso a várias APIs públ
 3. **Official Joke API** - Piadas organizadas por categoria
    - Piadas aleatórias e por tipo
 
+4. **QR code API** - Crie QR codes com base em um texto
+
+   - Gere uma imagem png QR code de um texto
+
 ### Funcionalidades MCP
 
 - **Resources**: Acesso a metadados e informações das APIs
@@ -570,6 +574,7 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 - [JSONPlaceholder](https://jsonplaceholder.typicode.com/) pela API de teste
 - [Cat Facts API](https://catfact.ninja/) pelos fatos interessantes
 - [Official Joke API](https://official-joke-api.appspot.com/) pelas piadas
+- [QR code API](https://goqr.me/api/doc/) pela geração de QR codes
 
 ---
 
